@@ -10,7 +10,7 @@ def load_robot_models(urdf_path):
     """
     加载完整的URDF模型，并过滤出仅包含上半身（左右机械臂和夹爪）的几何体。
     """
-    robot_dir = "/home/ryan/Documents/GitHub/AirExo-2-test/airexo/urdf_models/robot"
+    robot_dir = "./airexo/urdf_models/robot"
     
     # 加载完整的模型
     model, collision_model, visual_model_complete = pin.buildModelsFromUrdf(
@@ -195,9 +195,9 @@ def look_at(viz, camera_pos, target_pos, up=np.array([0, 0, 1])):
 
 def main():
     # --- 文件路径 ---
-    urdf_path = "/home/ryan/Documents/GitHub/AirExo-2-test/airexo/urdf_models/robot/true_robot.urdf"
-    right_csv_file_path = "/home/ryan/Documents/GitHub/AirExo-2-test/train_video/hand_landmarks_3d_offline_right.csv"
-    left_csv_file_path = "/home/ryan/Documents/GitHub/AirExo-2-test/train_video/hand_landmarks_3d_offline_left.csv"
+    urdf_path = "./airexo/urdf_models/robot/true_robot.urdf"
+    right_csv_file_path = "./train_video/hand_landmarks_3d_offline_right.csv"
+    left_csv_file_path = "./train_video/hand_landmarks_3d_offline_left.csv"
 
     # --- 模型加载（使用完整模型） ---
     model, data, collision_model, visual_model = load_robot_models(urdf_path)
@@ -205,7 +205,7 @@ def main():
     # --- 核心参数调整区 ---
     per_joint_max_delta = 0.15      
     total_max_delta = 0.4         
-    noise_level = 0.2             
+    noise_level = 0.01             
     ik_attempts = 20              
     lambda_weight = 0.1           
     
@@ -281,7 +281,7 @@ def main():
     # 设置相机视角
     look_at(viz, camera_pos=[-0.0032, 0.01, 1.7826], target_pos=[-0.0032, -0.5903, 1.3026])
     
-    time.sleep(2)
+    time.sleep(1)
 
     # --- 显示初始末端小球 ---
     # 更新运动学
@@ -301,7 +301,7 @@ def main():
     # viz.viewer["left_ee_sphere"].set_transform(tf.translation_matrix(left_ee_pos))
 
     # # --- 初始显示后暂停3秒 ---
-    time.sleep(3)
+    time.sleep(1)
 
     # --- 主循环：遍历轨迹 ---
     for i in range(min_frames):

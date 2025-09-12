@@ -10,7 +10,8 @@ def load_robot_model(urdf_path):
     """
     加载完整的URDF模型。
     """
-    robot_dir = "/home/ryan/Documents/GitHub/AirExo-2-test/airexo/urdf_models/robot"
+    robot_dir = "./airexo/urdf_models/robot"
+
     
     model, collision_model, visual_model = pin.buildModelsFromUrdf(
         urdf_path,
@@ -163,9 +164,9 @@ def look_at(viz, camera_pos, target_pos, up=np.array([0, 0, 1])):
 
 def main():
     # --- 文件路径 ---
-    urdf_path = "/home/ryan/Documents/GitHub/AirExo-2-test/airexo/urdf_models/robot/true_robot.urdf"
-    csv_file_path_right = "/home/ryan/Documents/GitHub/AirExo-2-test/train_video/hand_landmarks_3d_offline_left.csv"
-    csv_file_path_left = "/home/ryan/Documents/GitHub/AirExo-2-test/train_video/hand_landmarks_3d_offline_right.csv"
+    urdf_path = "./airexo/urdf_models/robot/true_robot.urdf"
+    csv_file_path_right = "./train_video/hand_landmarks_3d_offline_left.csv"
+    csv_file_path_left = "./train_video/hand_landmarks_3d_offline_right.csv"
 
     # --- 模型加载 ---
     model, data, collision_model, visual_model = load_robot_model(urdf_path)

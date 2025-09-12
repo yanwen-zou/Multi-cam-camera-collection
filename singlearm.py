@@ -10,7 +10,7 @@ def load_robot_models(urdf_path):
     """
     加载完整的URDF模型，并过滤出仅包含上半身（左右机械臂和夹爪）的几何体。
     """
-    robot_dir = "/home/ryan/Documents/GitHub/AirExo-2-test/airexo/urdf_models/robot"
+    robot_dir = "./airexo/urdf_models/robot"
     
     # 加载完整的模型
     model, collision_model, visual_model_complete = pin.buildModelsFromUrdf(
@@ -199,8 +199,8 @@ def look_at(viz, camera_pos, target_pos, up=np.array([0, 0, 1])):
 
 def main():
     # --- 文件路径 ---
-    urdf_path = "/home/ryan/Documents/GitHub/AirExo-2-test/airexo/urdf_models/robot/true_robot.urdf"
-    csv_file_path = "/home/ryan/Documents/GitHub/AirExo-2-test/train_video/hand_landmarks_3d_offline.csv"
+    urdf_path = "./airexo/urdf_models/robot/true_robot.urdf"
+    csv_file_path = "./train_video/hand_landmarks_3d_offline.csv"
 
     # --- 模型加载 ---
     model, data, collision_model, visual_model = load_robot_models(urdf_path)
