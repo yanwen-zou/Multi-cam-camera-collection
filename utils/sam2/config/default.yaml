@@ -1,0 +1,20 @@
+data:
+  scene_name: "scene_0036"
+  camera_id: "cam_104122061602"
+  prefix: "cam_104122061602/color" #"/home/tracy/airexo/AirExo-2/data/train/scene_0036/cam_104122061602/color"
+  input_data_root: "/home/ryan/Documents/GitHub/AirExo-2-test/data/train/"
+  tmp_dir: "/home/ryan/Documents/GitHub/AirExo-2-test/data/test"
+  visualize_dir: "/home/ryan/Documents/GitHub/AirExo-2-test/data/train/"
+  visualize_name: "/home/ryan/Documents/GitHub/AirExo-2-test/cam_104122061602/test"
+
+model:
+  checkpoint: "/home/ryan/Documents/GitHub/AirExo-2-test/dependencies/sam2/checkpoints/sam2.1_hiera_large.pt" #/home/tracy/airexo/AirExo-2/dependencies/sam2/checkpoints/sam2.1_hiera_large.pt
+  config: "/home/ryan/Documents/GitHub/AirExo-2-test/dependencies/sam2/sam2/configs/sam2.1/sam2.1_hiera_l.yaml" #sam2/configs/sam2.1/sam2.1_hiera_l.yaml
+  device: "cuda"
+ 
+processing:
+  convert_png_to_jpg: true #null  
+  interval: 1000 #null  
+  start_frame: 0 #null 
+  do_annotation: true
+  do_generalize: true

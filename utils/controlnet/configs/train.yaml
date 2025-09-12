@@ -1,0 +1,21 @@
+paths:
+  camera_dir: "/home/ryan/Documents/GitHub/AirExo-2-test/data/color"
+  render_dir: "/home/ryan/Documents/GitHub/AirExo-2-test/data/rgb"
+  output_dir: "/home/ryan/Documents/GitHub/AirExo-2-test/checkpoint"
+
+model:
+  yaml_path: null
+  resume_path: ""  # 设置为空字符串，不使用预训练模型
+  sd_locked: false   # 改为false，允许训练所有参数
+  only_mid_control: false
+
+training:
+  prompt: "robotic arms, dual arm, industrial robotic manipulator, metallic silver color, mechanical joints, precise mechanical details, gripper end effector, high quality photo, photorealistic, clear and sharp details"
+  batch_size: 2      # 降低batch size
+  num_workers: 2     # 降低worker数量
+  learning_rate: 1e-4  # 学习率
+  precision: 16      # 使用16位精度
+  img_size: 512
+  logger_freq: 300
+  save_steps: 1000
+  accumulate_grad_batches: 8  # 增加梯度累积
