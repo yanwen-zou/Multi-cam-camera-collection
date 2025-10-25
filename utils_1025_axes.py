@@ -210,7 +210,7 @@ def draw_target_axes(viz, parent:str, name_prefix:str, pose:pin.SE3, axis_len:fl
 # 单帧求解
 # -------------------------------
 def solve_one_frame(model, data, q_curr, active_idxs, pos, eul, end_eff,
-                    ik_attempts=20, noise_level=0.02,
+                    ik_attempts=20, noise_level=0.0,
                     per_joint_max_delta=0.10, total_max_delta=0.4, lambda_weight=0.2):
     prev = q_curr.copy()
     sols, errs = [], []
@@ -265,7 +265,7 @@ def run_dual_arm_trajectory(
 
     viz = init_meshcat(model,c_model,v_model)
     if set_initial_camera:
-        look_at(viz, [-0.0032,0.15,1.8026], [-0.0032,0.4903,1.2526])
+        look_at(viz, [-0.0032,0.20,1.8026], [-0.0032,0.6003,1.1526])
 
     # 创建两个局部根节点 <<< 修改点 >>>
     viz.viewer["dualarm_scene/right_arm_base"].set_transform(np.eye(4))
@@ -279,14 +279,16 @@ def run_dual_arm_trajectory(
 
     all_rows=[]; dt=1.0/60.0
 
-    for i in range(N):
+    for i in range(200,N):
         print(f"\n--- Frame {i} ---")
 
         # 在各臂坐标系中目标姿态（不再转到世界坐标系） <<< 修改点 >>>
         r_b_p = R_bc_r @ r_pos[i] + t_bc_r
-        r_b_R = R_bc_r @ pin.rpy.rpyToMatrix(r_eul[i])
         l_b_p = R_bc_l @ l_pos[i] + t_bc_l
-        l_b_R = R_bc_l @ pin.rpy.rpyToMatrix(l_eul[i])
+
+        R_fix = pin.rpy.rpyToMatrix(0, np.pi/2, 0)  # x→z
+        r_b_R = R_bc_r @ pin.rpy.rpyToMatrix(r_eul[i]) @ R_fix
+        l_b_R = R_bc_l @ pin.rpy.rpyToMatrix(l_eul[i]) @ R_fix
 
         r_b_eul = pin.rpy.matrixToRpy(r_b_R)
         l_b_eul = pin.rpy.matrixToRpy(l_b_R)
@@ -320,10 +322,24 @@ def run_dual_arm_trajectory(
         r_base_pose = data.oMf[frame_id_r_base]
         l_base_pose = data.oMf[frame_id_l_base]
 
+        # # 绘制这两个坐标系（每帧刷新一次）
+        # draw_target_axes(viz, "dualarm_scene", "r_base_link1_axes", r_base_pose, axis_len=0.1)
+        # draw_target_axes(viz, "dualarm_scene", "l_base_link1_axes", l_base_pose, axis_len=0.1)
 
-        # 绘制这两个坐标系（每帧刷新一次）
-        draw_target_axes(viz, "dualarm_scene", "r_base_link1_axes", r_base_pose, axis_len=0.1)
-        draw_target_axes(viz, "dualarm_scene", "l_base_link1_axes", l_base_pose, axis_len=0.1)
+        # 获取左右末端当前姿态
+        frame_id_r_ee = model.getFrameId(right_end_effector)
+        frame_id_l_ee = model.getFrameId(left_end_effector)
+        r_ee_pose = data.oMf[frame_id_r_ee]
+        l_ee_pose = data.oMf[frame_id_l_ee]
+
+        # 固定旋转，让夹爪朝向 z 方向（原 x→z）
+        R_fix = pin.rpy.rpyToMatrix(0, np.pi/2, 0)
+        r_corrected_pose = pin.SE3(r_ee_pose.rotation @ R_fix, r_ee_pose.translation)
+        l_corrected_pose = pin.SE3(l_ee_pose.rotation @ R_fix, l_ee_pose.translation)
+
+        # 画出修正后的末端坐标系，看朝向是否为 z 轴
+        draw_target_axes(viz, "dualarm_scene", "r_gripper_corrected_axes", r_corrected_pose, axis_len=0.15)
+        draw_target_axes(viz, "dualarm_scene", "l_gripper_corrected_axes", l_corrected_pose, axis_len=0.15)
 
         all_rows.append([i * dt] + q.tolist())
         time.sleep(float(sleep_each))
