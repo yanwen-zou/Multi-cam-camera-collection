@@ -1,0 +1,24 @@
+paths:
+  base_path: /home/dell/AirExo-2/data     
+  scene_name: scene_0009                       
+  camera_id: "cam_1"                            
+
+dirs:
+  color: "color"                                
+  depth: "depth"                               
+  render_robot: "render_robot"                  
+  output: "color_controlnet"          
+
+model:
+  config_path: "/home/dell/AirExo-2/dependencies/ControlNet/models/cldm_v15.yaml"
+  checkpoint_path: "/home/dell/AirExo-2/checkpoint0930/epoch=437-step=73999.ckpt"
+  device: "cuda"
+
+inference:
+  prompt: "white robotic arms, dual arm, industrial robotic manipulator, mechanical joints, black and silver accents, precise mechanical details, gripper end effector, high quality photo, photorealistic, isolated on white background with soft shadow and subtle rim light to define edges, bright studio lighting, clear and sharp details" #"robotic arms, dual arm, industrial robotic manipulator, metallic silver color, mechanical joints, precise mechanical details, gripper end effector, high quality photo, photorealistic, clear and sharp details"
+  num_samples: 1
+  image_size: 256
+  steps: 50
+  scale: 9.0
+  seed: null
+  batch_size: 8
